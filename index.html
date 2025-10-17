@@ -7,79 +7,39 @@
     <style>body {
   font-family: Arial, sans-serif;
   margin: 20px;
-  background-color: #f9f9f9;
+  line-height: 1.6;
 }
 #content {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-#content h1 {
-  color: #333;
-}
-#content a {
-  color: #0066cc;
-  text-decoration: none;
-}
-#content a:hover {
-  text-decoration: underline;
-}
-#content blockquote {
-  border-left: 4px solid #ccc;
-  padding-left: 10px;
-  color: #555;
-  margin: 20px 0;
-}
-#content hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 20px 0;
-}</style>
+</style>
 </head>
 <body>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Markdown Viewer</title>
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="content"></div>
 <script src="script.js"></script>
 </body>
 </html>
-    <script>document.addEventListener('DOMContentLoaded', () => {
-  const markdownContent = `# Sample Markdown
+    <script>fetch('content.md')
+  .then(response => response.text())
+  .then(md => {
+    const htmlContent = marked(md);
+    document.getElementById('content').innerHTML = htmlContent;
+  })
+  .catch(error => {
+    document.getElementById('content').innerText = 'Error loading content.';
+  });
 
-This is a paragraph with some **bold** text and *italic* text.
-
-- List item 1
-- List item 2
-- List item 3
-
-[Link to OpenAI](https://openai.com)
-
-> Blockquote example
-
----
-
-`;
-  // Use marked.js to parse Markdown, assuming marked is included via CDN
-  fetch('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
-    .then(response => response.text())
-    .then(markedScript => {
-      eval(markedScript);
-      document.getElementById('content').innerHTML = marked.parse(markdownContent);
-    })
-    .catch(() => {
-      // fallback if fetch fails: use a simple parser or static HTML
-      document.getElementById('content').innerHTML = `<h1>Sample Markdown</h1><p>This is a paragraph with some <strong>bold</strong> text and <em>italic</em> text.</p><ul><li>List item 1</li><li>List item 2</li><li>List item 3</li></ul><p><a href="https://openai.com">Link to OpenAI</a></p><blockquote>Blockquote example</blockquote><hr />`;
-    });
-});</script>
+// You might need to include the marked library for Markdown parsing.
+// For self-contained, include the minified library below or load via CDN.</script>
 </body>
 </html>
