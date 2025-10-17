@@ -7,28 +7,18 @@
     <style>body {
   font-family: Arial, sans-serif;
   margin: 20px;
-  background-color: #f9f9f9;
+  background-color: #f4f4f4;
+}
+
+h1 {
   color: #333;
 }
+
 #content {
-  max-width: 800px;
-  margin: 0 auto;
+  background: #fff;
   padding: 20px;
-  background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-h1 {
-  font-size: 2em;
-  margin-bottom: 0.5em;
-}
-h2 {
-  font-size: 1.5em;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-}
-li {
-  margin-left: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 </style>
 </head>
@@ -36,38 +26,25 @@ li {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Markdown Viewer</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Markdown Viewer</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="content"></div>
-  <script src="script.js"></script>
+<h1>Markdown Content</h1>
+<div id="content"></div>
+<script src="script.js"></script>
 </body>
 </html>
     <script>fetch('content.md')
   .then(response => response.text())
-  .then(markdown => {
-    // Use a simple markdown parser library if available, or a basic converter
-    // For demonstration, we'll use marked.js via CDN
-    // Since the instruction is self-contained, include minimal parsing
-    // Alternatively, implement a very basic markdown to HTML converter
-    // Here, for simplicity, we'll assume marked.js is available via CDN
-    // But as per instruction, only code, so embed parser logic if needed
-    // For now, implement a very naive markdown to HTML converter
-    const htmlContent = markdown
-      .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-      .replace(/^## (.*)$/gm, '<h2>$1</h2>')
-      .replace(/\*\*(.*)\*\*/gm, '<strong>$1</strong>')
-      .replace(/\*(.*)\*/gm, '<em>$1</em>')
-      .replace(/^\s*\- (.*)$/gm, '<li>$1</li>')
-      .replace(/^\s*\* (.*)$/gm, '<li>$1</li>')
-      .replace(/\n/g, '<br/>');
+  .then(md => {
+    const htmlContent = marked(md);
     document.getElementById('content').innerHTML = htmlContent;
   })
-  .catch(error => {
-    document.getElementById('content').innerText = 'Error loading content.';
+  .catch(err => {
+    document.getElementById('content').innerText = 'Error loading markdown.';
   });</script>
 </body>
 </html>
