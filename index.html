@@ -7,33 +7,25 @@
     <style>body {
   font-family: Arial, sans-serif;
   margin: 20px;
-  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
 }
 #content {
   max-width: 800px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 h1 {
   font-size: 2em;
   margin-bottom: 0.5em;
 }
 h2 {
-  font-size: 1.75em;
-  margin-bottom: 0.5em;
-}
-h3 {
   font-size: 1.5em;
+  margin-top: 1em;
   margin-bottom: 0.5em;
-}
-p {
-  margin-bottom: 1em;
-}
-a {
-  color: #0366d6;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
 }
 li {
   margin-left: 20px;
@@ -44,52 +36,38 @@ li {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Markdown Viewer</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown Viewer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="content"></div>
-<script src="script.js"></script>
+  <div id="content"></div>
+  <script src="script.js"></script>
 </body>
 </html>
-    <script>document.addEventListener('DOMContentLoaded', () => {
-  const markdownContent = `# Sample Markdown
-
-This is a paragraph with **bold** text and *italic* text.
-
-- Item 1
-- Item 2
-- Item 3
-
-[Link to OpenAI](https://openai.com)"; // Replace this string with the actual content of 'content.md'
-
-// Function to convert markdown to HTML
-function markdownToHTML(markdown) {
-  // Basic conversions
-  let html = markdown
-    .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-    .replace(/^## (.*)$/gm, '<h2>$1</h2>')
-    .replace(/^### (.*)$/gm, '<h3>$1</h3>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/\n\n/g, '<p></p>')
-    .replace(/\n/g, '<br />')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    .replace(/^- (.*)$/gm, '<li>$1</li>');
-
-  // Wrap list items in <ul> if present
-  if (html.match(/<li>/)) {
-    html = html.replace(/(<li>.*?\n)+/g, match => `<ul>${match}</ul>`);
-  }
-
-  return html;
-}
-
-// Render the converted HTML
-const contentDiv = document.getElementById('content');
-contentDiv.innerHTML = markdownToHTML(markdownContent);
-</script>
+    <script>fetch('content.md')
+  .then(response => response.text())
+  .then(markdown => {
+    // Use a simple markdown parser library if available, or a basic converter
+    // For demonstration, we'll use marked.js via CDN
+    // Since the instruction is self-contained, include minimal parsing
+    // Alternatively, implement a very basic markdown to HTML converter
+    // Here, for simplicity, we'll assume marked.js is available via CDN
+    // But as per instruction, only code, so embed parser logic if needed
+    // For now, implement a very naive markdown to HTML converter
+    const htmlContent = markdown
+      .replace(/^# (.*)$/gm, '<h1>$1</h1>')
+      .replace(/^## (.*)$/gm, '<h2>$1</h2>')
+      .replace(/\*\*(.*)\*\*/gm, '<strong>$1</strong>')
+      .replace(/\*(.*)\*/gm, '<em>$1</em>')
+      .replace(/^\s*\- (.*)$/gm, '<li>$1</li>')
+      .replace(/^\s*\* (.*)$/gm, '<li>$1</li>')
+      .replace(/\n/g, '<br/>');
+    document.getElementById('content').innerHTML = htmlContent;
+  })
+  .catch(error => {
+    document.getElementById('content').innerText = 'Error loading content.';
+  });</script>
 </body>
 </html>
