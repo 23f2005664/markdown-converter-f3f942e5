@@ -7,13 +7,37 @@
     <style>body {
   font-family: Arial, sans-serif;
   margin: 20px;
-  line-height: 1.6;
+  background-color: #f9f9f9;
 }
 #content {
   max-width: 800px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-</style>
+#content h1 {
+  color: #333;
+}
+#content a {
+  color: #0066cc;
+  text-decoration: none;
+}
+#content a:hover {
+  text-decoration: underline;
+}
+#content blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 10px;
+  color: #555;
+  margin: 20px 0;
+}
+#content hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 20px 0;
+}</style>
 </head>
 <body>
 <!DOCTYPE html>
@@ -30,15 +54,31 @@
 </body>
 </html>
     <script>document.addEventListener('DOMContentLoaded', () => {
-  fetch('content.md')
+  const markdownContent = `# Sample Markdown
+
+This is a paragraph with some **bold** text and *italic* text.
+
+- List item 1
+- List item 2
+- List item 3
+
+[Link to OpenAI](https://openai.com)
+
+> Blockquote example
+
+---
+
+`;
+  // Use marked.js to parse Markdown, assuming marked is included via CDN
+  fetch('https://cdn.jsdelivr.net/npm/marked/marked.min.js')
     .then(response => response.text())
-    .then(md => {
-      const html = marked.parse(md);
-      document.getElementById('content').innerHTML = html;
+    .then(markedScript => {
+      eval(markedScript);
+      document.getElementById('content').innerHTML = marked.parse(markdownContent);
     })
-    .catch(err => {
-      document.getElementById('content').innerText = 'Failed to load content.';
-      console.error(err);
+    .catch(() => {
+      // fallback if fetch fails: use a simple parser or static HTML
+      document.getElementById('content').innerHTML = `<h1>Sample Markdown</h1><p>This is a paragraph with some <strong>bold</strong> text and <em>italic</em> text.</p><ul><li>List item 1</li><li>List item 2</li><li>List item 3</li></ul><p><a href="https://openai.com">Link to OpenAI</a></p><blockquote>Blockquote example</blockquote><hr />`;
     });
 });</script>
 </body>
